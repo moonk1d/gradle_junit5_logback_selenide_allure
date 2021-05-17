@@ -1,0 +1,31 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <file>test.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <property name="LOG_HOME" value="build/logs/" />
+
+    <appender name="SIFTER" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>testCaseName</key>
+            <defaultValue>ALL</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${testCaseName}" class="ch.qos.logback.core.FileAppender">
+                <file>${LOG_HOME}/${testCaseName}.log</file>
+                <append>false</append>
+                <encoder>
+                    <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="SIFTER"/>
+    </root>
+</configuration>
